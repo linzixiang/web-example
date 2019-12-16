@@ -1,0 +1,93 @@
+package ${basePackage}.web.controller.${moduleName};
+
+import com.linzx.framework.web.vo.AjaxResult;
+import com.linzx.framework.web.BaseController;
+import com.linzx.${moduleName}.domain.${className};
+import com.linzx.${moduleName}.service.${className}Service;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+/**
+ * ${tableComment} 信息操作处理
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Controller
+@RequestMapping(${className}Controller.prefix)
+public class ${className}Controller extends BaseController {
+
+    public static final String prefix = "${moduleName}/${classname}";
+
+    @Autowired
+    private ${className}Service ${classname}Service;
+
+    @RequiresPermissions("${moduleName}:${classname}:view")
+    @GetMapping("/index")
+    public String index() {
+        return prefix + "/index";
+    }
+
+    /**
+    * 列表查询
+    */
+    @RequiresPermissions("${moduleName}:${classname}:list")
+    @GetMapping("/list")
+    @ResponseBody
+    public AjaxResult list(${className} ${classname}) {
+        startPage();
+        List<${className}> ${classname}List = ${classname}Service.select${className}List(${classname});
+        return AjaxResult.success(${classname}List);
+    }
+
+    /**
+     * 新增
+     */
+    @GetMapping("/preAdd")
+    public String preAdd(ModelMap mmap) {
+        return prefix + "/add";
+    }
+
+    @RequiresPermissions("${moduleName}:${classname}:add")
+    @PostMapping("/saveAdd")
+    @ResponseBody
+    public AjaxResult saveAdd(${className} ${classname}) {
+        Long ${classname}Id = ${classname}Service.insert${className}(${classname});
+        return AjaxResult.success(${classname}Id);
+    }
+
+    /**
+     * 修改
+     */
+    @GetMapping("/preEdit/{${classname}Id}")
+    public String preEdit(@PathVariable("${classname}Id") Long ${classname}Id, ModelMap mmap) {
+        ${className} ${classname} = ${classname}Service.get${className}ById(${classname}Id);
+        mmap.put("${classname}", ${classname});
+        return prefix + "/edit";
+    }
+
+    @RequiresPermissions("${moduleName}:${classname}:edit")
+    @PostMapping("/saveEdit")
+    @ResponseBody
+    public AjaxResult saveEdit(${className} ${classname}) {
+        ${classname}Service.update${className}(${classname});
+        return AjaxResult.success();
+    }
+
+    /**
+     * 删除
+     */
+    @RequiresPermissions("${moduleName}:${classname}:remove")
+    @PostMapping("/remove/{${classname}Id}")
+    @ResponseBody
+    public AjaxResult remove(@PathVariable("${classname}Id") Long ${classname}Id) {
+        ${classname}Service.delete${className}ByIds(${classname}Id.toString());
+        return AjaxResult.success();
+    }
+
+}

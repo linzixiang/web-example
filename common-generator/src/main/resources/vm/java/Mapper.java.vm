@@ -1,0 +1,15 @@
+package ${package}.mapper;
+
+import com.linzx.framework.mapper.BaseMapper;
+import ${package}.domain.${className};
+import java.lang.Long;
+
+/**
+ * ${tableComment} 数据层
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${className}Mapper extends BaseMapper<Long, ${className}>{
+	
+}

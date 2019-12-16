@@ -1,0 +1,27 @@
+package ${package}.service.impl;
+
+import java.lang.Long;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.linzx.framework.web.BaseService;
+import ${package}.mapper.${className}Mapper;
+import ${package}.domain.${className};
+import ${package}.service.${className}Service;
+
+/**
+ * ${tableComment} 服务层实现
+ * 
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+public class ${className}Service extends BaseService<Long, ${className}, ${className}Mapper> implements I${className}Service {
+	@Autowired
+	private ${className}Mapper ${classname}Mapper;
+
+    @Override
+    public ${className}Mapper setMapper() {
+        return this.${classname}Mapper;
+    }
+	
+}
