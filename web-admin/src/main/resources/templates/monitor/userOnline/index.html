@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="fragment :: header('在线用户列表')" />
+</head>
+<body class="gray-bg">
+    <div class="container-div">
+        <div class="col-sm-12 search-collapse">
+            <form id="type-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            登录地址：<input type="text" name="dictName"/>
+                        </li>
+                        <li>
+                            操作人员：<input type="text" name="dictCode"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-danger btn-del disabled" onclick="javascript:batchForceLogout()" shiro:hasPermission="monitor:userOnline:forceLogout">
+                <i class="fa fa-sign-out"></i> 强退
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+    <th:block th:include="fragment :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "/monitor/userOnline";
+        var forceFlag = [[${@commonService.hasPermi('monitor:userOnline:forceLogout')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                sortName: "updatedTime",
+                sortOrder: "desc",
+                escape: true,
+                columns: [{
+                    checkbox: true
+                },{
+                    field: 'sessionId',
+                    title: '主键',
+                    visible: false
+                },{
+                    title: "序号",
+                    formatter: function (value, row, index) {
+                        return $.table.serialNumber(index);
+                    }
+                },{
+                    field: 'sessionKey',
+                    title: '会话编号'
+                },{
+                    field: 'loginName',
+                    title: '登录名称',
+                    sortable: true
+                },{
+                    field: 'ipaddr',
+                    title: '登录ip'
+                },{
+                    field: 'loginLocation',
+                    title: '登录地点'
+                },{
+                    field: 'browser',
+                    title: '浏览器'
+                },{
+                    field: 'os',
+                    title: '操作系统'
+                },{
+                    field: 'onlineStatus',
+                    title: '会话状态'
+                },{
+                    field: 'createdTime',
+                    title: '登录时间',
+                    sortable: true
+                },{
+                    field: 'updatedTime',
+                    title: '最后访问时间',
+                    sortable: true
+                },{
+                    title: '操作',
+                    align: 'center',
+                    visible: !forceFlag,
+                    formatter: function(value, row, index) {
+                        var msg = '<a class="btn btn-danger btn-xs ' + forceFlag + '" href="#" onclick="forceLogout(\'' + row.sessionId + '\')"><i class="fa fa-sign-out"></i>强退</a> ';
+                        return msg;
+                    }
+                }]
+            }
+            $.table.init(options);
+        })
+        // 单条强退
+        function forceLogout(sessionId) {
+            $.modal.confirm("确定要强制选中用户下线吗？", function() {
+                $.operate.post(prefix + "/forceLogout", { sessionIds: [sessionId]});
+            })
+        }
+        // 批量强退
+        function batchForceLogout() {
+            var rows = $.table.selectColumns("sessionId");
+            if (rows.length == 0) {
+                $.modal.alertWarning("请选择要强退的用户");
+                return;
+            }
+            $.modal.confirm("确认要强退选中的" + rows.length + "条数据吗?", function() {
+                var url = prefix + "/batchForceLogout";
+                var data = { "sessionIds": rows };
+                $.operate.post(url, data);
+            });
+        }
+    </script>
+</body>

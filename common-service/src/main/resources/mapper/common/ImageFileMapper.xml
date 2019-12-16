@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.common.mapper.ImageFileMapper">
+    
+    <resultMap type="com.linzx.common.domain.ImageFile" id="ImageFileResult">
+        <result property="imageId"    column="image_id"    />
+        <result property="name"    column="name"    />
+        <result property="imageExt"    column="image_ext"    />
+        <result property="originInfo"    column="origin_info"    />
+        <result property="thumbnail800"    column="thumbnail_800"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select image_id, name, image_ext, origin_info, thumbnail_800, created_time, updated_time from common_image_file
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.common.domain.ImageFile" resultMap="ImageFileResult">
+        <include refid="selectVo"/>
+        <include refid="selectList_where"/>
+    </select>
+
+    <sql id="selectList_where">
+        <where>
+            <if test="imageId != null "> and image_id = #{imageId}</if>
+            <if test="name != null "> and name = #{name}</if>
+            <if test="imageExt != null "> and image_ext = #{imageExt}</if>
+            <if test="originInfo != null "> and origin_info = #{originInfo}</if>
+            <if test="thumbnail800 != null "> and thumbnail_800 = #{thumbnail800}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </sql>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="ImageFileResult">
+        <include refid="selectVo"/>
+        where image_id = #{imageId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.common.domain.ImageFile" useGeneratedKeys="true" keyProperty="imageId">
+        insert into common_image_file
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null  ">name,</if>
+			<if test="imageExt != null  ">image_ext,</if>
+			<if test="originInfo != null  ">origin_info,</if>
+			<if test="thumbnail800 != null  ">thumbnail_800,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null  ">#{name},</if>
+			<if test="imageExt != null  ">#{imageExt},</if>
+			<if test="originInfo != null  ">#{originInfo},</if>
+			<if test="thumbnail800 != null  ">#{thumbnail800},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.common.domain.ImageFile">
+        update common_image_file
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  ">name = #{name},</if>
+            <if test="imageExt != null  ">image_ext = #{imageExt},</if>
+            <if test="originInfo != null  ">origin_info = #{originInfo},</if>
+            <if test="thumbnail800 != null  ">thumbnail_800 = #{thumbnail800},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="params != null">
+                <if test="params.spcColumn != null and params.spcVal != null">
+                    ${params.spcColumn} = #{params.spcVal},
+                </if>
+            </if>
+        </trim>
+        where image_id = #{imageId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from common_image_file where image_id = #{imageId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from common_image_file where image_id in 
+        <foreach item="imageId" collection="array" open="(" separator="," close=")">
+            #{imageId}
+        </foreach>
+    </delete>
+
+    <select id="getImageInfoBySpec" resultType="java.util.Map">
+        SELECT
+          `name`, image_ext as imageExt, ${imageSpec}
+        FROM
+            common_image_file
+        where image_id = #{imageId}
+    </select>
+    
+</mapper>

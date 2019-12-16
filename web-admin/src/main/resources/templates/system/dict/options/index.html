@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="fragment :: header('字典数据列表')" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <input id="curDictCode" name="curDictCode" type="hidden">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="data-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            字典编码：<select id="dictCode" name="dictCode">
+                        </select>
+                        </li>
+                        <li>
+                            字典标签：<input type="text" name="dictLabel"/>
+                        </li>
+                        <li>
+                            是否停用：
+                            <select name="status" th:with="options=${@commonService.queryDictOptions('sys_normal_disable')}">
+                                <option value="">所有</option>
+                                <option value="0" th:each="option : ${options}" th:value="${option.value}" th:text="${option.labelName}">正常</option>
+                            </select>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="fragment :: footer" />
+<script th:inline="javascript">
+    var editFlag = [[${@commonService.hasPermi('system:dict:edit')}]];
+    var removeFlag = [[${@commonService.hasPermi('system:dict:remove')}]];;
+    var datas = [[${@commonService.queryDictOptions('sys_normal_disable')}]];
+    var prefix = ctx + "/system/dict/options";
+    var dictCode = httpUtils.getUrlParam("dictCode");
+    $("#curDictCode").val(dictCode)
+    $(function() {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/preAdd/{id}",
+            updateUrl: prefix + "/preEdit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            queryParams: queryParams,
+            sortName: "createdTime",
+            sortOrder: "desc",
+            modalName: "数据",
+            columns: [{
+                checkbox: true
+            },
+            {
+                field: 'dictCode',
+                title: '字典编码'
+            },
+            {
+                field: 'optionLabel',
+                title: '字典标签'
+            },
+            {
+                field: 'dictValue',
+                title: '字典键值'
+            },
+            {
+                field: 'orderNum',
+                title: '字典排序'
+            },
+            {
+                field: 'status',
+                title: '状态',
+                align: 'center',
+                formatter: function(value, row, index) {
+                    return $.table.selectDictLabel(datas, row.status);
+                }
+            },
+            {
+                field: 'remark',
+                title: '备注'
+            },
+            {
+                field: 'createdTime',
+                title: '创建时间',
+                sortable: true
+            },
+            {
+                title: '操作',
+                align: 'center',
+                formatter: function(value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.dictOptionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.dictOptionId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                    return actions.join('');
+                }
+            }]
+        };
+        $.table.init(options);
+    });
+
+    function queryParams(params) {
+        var search = $.table.queryParams(params);
+        search.dictCode = $("#curDictCode").val();
+        return search;
+    }
+
+    /*字典数据-新增字典*/
+    function add() {
+        var dictCode = $("#curDictCode").val();
+        $.operate.add(dictCode);
+    }
+</script>
+</body>
+</html>

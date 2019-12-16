@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.RoleMapper">
+    
+    <resultMap type="com.linzx.system.domain.Role" id="RoleResult">
+        <result property="roleId"    column="role_id"    />
+        <result property="roleName"    column="role_name"    />
+        <result property="roleCode"    column="role_code"    />
+        <result property="dataScope"    column="data_scope"    />
+        <result property="menuScope"    column="menu_scope"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="revision"    column="revision"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select role_id, role_name, role_code, data_scope, menu_scope, order_num, status, del_flag, remark, revision, created_by, created_time, updated_by, updated_time from sys_role
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.system.domain.Role" resultMap="RoleResult">
+        <include refid="selectVo"/>
+        <include refid="selectList_where"/>
+    </select>
+
+    <sql id="selectList_where">
+        <where>
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+            <if test="roleName != null and roleName != ''"> and role_name = #{roleName}</if>
+            <if test="roleCode != null and roleCode != ''"> and role_code = #{roleCode}</if>
+            <if test="dataScope != null "> and data_scope = #{dataScope}</if>
+            <if test="menuScope != null "> and menu_scope = #{menuScope}</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+            <if test="remark != null "> and remark = #{remark}</if>
+            <if test="revision != null "> and revision = #{revision}</if>
+            <if test="createdTimeGte != null and createdTimeGte != ''">
+                and created_time >= #{createdTimeGte}
+            </if>
+            <if test="createdTimeLte != null and createdTimeLte != ''">
+                <![CDATA[and created_time <= #{createdTimeLte}]]>
+            </if>
+            <if test="params.roleName != null and params.roleName != ''">
+                and role_name like concat('%',#{params.roleName},'%')
+            </if>
+            <if test="params.roleCode != null and params.roleCode != ''">
+                and role_code like concat('%',#{params.roleCode},'%')
+            </if>
+            <if test="params.excludedId != null">
+                and role_id != #{params.excludedId}
+            </if>
+        </where>
+    </sql>
+    
+    <select id="getById" parameterType="java.lang.Long" resultMap="RoleResult">
+        <include refid="selectVo"/>
+        where role_id = #{roleId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.Role" useGeneratedKeys="true" keyProperty="roleId">
+        insert into sys_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleName != null  ">role_name,</if>
+			<if test="roleCode != null  ">role_code,</if>
+			<if test="dataScope != null  ">data_scope,</if>
+			<if test="menuScope != null  ">menu_scope,</if>
+			<if test="orderNum != null  ">order_num,</if>
+			<if test="status != null  ">status,</if>
+			<if test="delFlag != null  ">del_flag,</if>
+			<if test="remark != null  ">remark,</if>
+			<if test="revision != null  ">revision,</if>
+			<if test="createdBy != null  ">created_by,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedBy != null  ">updated_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleName != null  ">#{roleName},</if>
+			<if test="roleCode != null  ">#{roleCode},</if>
+			<if test="dataScope != null  ">#{dataScope},</if>
+			<if test="menuScope != null  ">#{menuScope},</if>
+			<if test="orderNum != null  ">#{orderNum},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="delFlag != null  ">#{delFlag},</if>
+			<if test="remark != null  ">#{remark},</if>
+			<if test="revision != null  ">#{revision},</if>
+			<if test="createdBy != null  ">#{createdBy},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedBy != null  ">#{updatedBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.Role">
+        update sys_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleName != null">role_name = #{roleName},</if>
+            <if test="roleCode != null">role_code = #{roleCode},</if>
+            <if test="dataScope != null ">data_scope = #{dataScope},</if>
+            <if test="menuScope != null ">menu_scope = #{menuScope},</if>
+            <if test="orderNum != null  ">order_num = #{orderNum},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="delFlag != null  ">del_flag = #{delFlag},</if>
+            <if test="remark != null  ">remark = #{remark},</if>
+            <if test="createdBy != null  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+        </trim>
+        where role_id = #{roleId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_role where role_id = #{roleId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_role where role_id in 
+        <foreach item="roleId" collection="array" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </delete>
+
+    <!-- 自定义sql -->
+    <select id="selectRoleListByUserId" resultMap="RoleResult">
+        SELECT
+            role.role_id, role_name, role_code, data_scope, menu_scope, order_num, status, del_flag, remark, revision, created_by, created_time, updated_by, updated_time
+        FROM
+            sys_user_role  userrole
+        LEFT JOIN sys_role role ON userrole.role_id = role.role_id
+        WHERE userrole.user_id = #{userId}
+    </select>
+
+    <select id="countByCondition" resultType="java.lang.Integer" parameterType="com.linzx.system.domain.Role">
+        select count(1) from  sys_role
+        <include refid="selectList_where"/>
+    </select>
+</mapper>

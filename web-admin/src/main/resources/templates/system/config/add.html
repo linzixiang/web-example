@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="fragment :: header('新增参数')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-config-add" name="form-config-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">参数名称：</label>
+            <div class="col-sm-8">
+                <input id="configName" name="configName" class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">参数键名：</label>
+            <div class="col-sm-8">
+                <input id="configCode" name="configCode" class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">参数键值：</label>
+            <div class="col-sm-8">
+                <input id="configValue" name="configValue" class="form-control" type="text" required>
+            </div>
+        </div>
+        <!--<div class="form-group">-->
+            <!--<label class="col-sm-3 control-label">系统内置：</label>-->
+            <!--<div class="col-sm-8">-->
+                <!--<div class="radio-box" th:each="dict : ${@commonService.queryDictOptions('sys_yes_no')}">-->
+                    <!--<input type="radio" th:id="'sys_normal_disable_' + ${dict.value}" name="configType" th:value="${dict.value}">-->
+                    <!--<label th:for="'sys_normal_disable_' + ${dict.value}" th:text="${dict.labelName}"></label>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea id="remark" name="remark" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="fragment :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "/system/config";
+
+    $("#form-config-add").validate({
+        onkeyup: false,
+        rules: {
+            configCode: {
+                remote: {
+                    url: prefix + "/checkConfigCodeUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "configCode": function() {
+                            return $.common.trim($("#configCode").val());
+                        }
+                    },
+                    dataFilter: function(data, type) {
+                        return $.parseJSON(data).data;
+                    }
+                }
+            }
+        },
+        messages: {
+            "configCode": {
+                remote: "参数键名已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/saveAdd", $('#form-config-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

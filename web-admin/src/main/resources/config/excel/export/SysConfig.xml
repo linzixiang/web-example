@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<excel>
+    <header showSerialNumber="true" titleName="系统配置"/>
+    <content>
+        <column name="名称" field="configName" index="1"/>
+        <column name="代码" field="configCode" index="2"/>
+        <column name="值" field="configValue" index="3"/>
+        <column name="系统内置" field="sysInner" formatType="dict" dictCode="sys_yes_no" index="4"/>
+        <column name="创建时间" field="createdTime" index="5"/>
+    </content>
+</excel>

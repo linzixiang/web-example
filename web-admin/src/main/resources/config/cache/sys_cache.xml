@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<caches>
+    <module name="system">
+        <!--
+            name：缓存命名
+            ttl: 存活时间，0表示长期有效
+            timeUnit：存活时间单位：seconds，minutes，hours，days
+            // ehcache 配置
+            overflowToDisk：  当内存中对象数量达到maxElementsInMemory时，Ehcache将会对象写到磁盘中
+            maxElementsInMemory：缓存最大个数，默认500
+        -->
+        <cache name="sysDict" ttl="60" timeUnit="minutes" maxElementsInMemory="500"  overflowToDisk="true" />
+        <cache name="userLoginInfo" ttl="60" timeUnit="minutes" maxElementsInMemory="500" overflowToDisk="true"/>
+        <cache name="token" ttl="0" maxElementsInMemory="500"  overflowToDisk="true"/>
+    </module>
+</caches>

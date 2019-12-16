@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<columns>
+    <column code="mobilePhone" name="手机号" formatBeanMethod="sensitiveFormat.mobilePhone"/>
+    <column code="saleMoney" name="销售价" formatBeanMethod="sensitiveFormat.mobilePhone"/>
+</columns>

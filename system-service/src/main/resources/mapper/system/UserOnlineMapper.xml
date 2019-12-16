@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.UserOnlineMapper">
+
+    <resultMap type="com.linzx.system.domain.UserOnline" id="UserOnlineResult">
+        <result property="sessionId"    column="session_id"    />
+        <result property="sessionKey"    column="session_key"    />
+        <result property="userId"    column="user_id"    />
+        <result property="loginName"    column="login_name"    />
+        <result property="ipaddr"    column="ipaddr"    />
+        <result property="browser"    column="browser"    />
+        <result property="onlineStatus"    column="online_status"    />
+        <result property="loginLocation"    column="login_location"    />
+        <result property="os"    column="os"    />
+        <result property="timeOut"    column="time_out"    />
+        <result property="revision"    column="revision"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectUserOnlineVo">
+        select session_id, session_key, user_id, login_name, ipaddr, browser, online_status, login_location, os, time_out, revision, created_by, created_time, updated_by, updated_time, remark from sys_user_online
+    </sql>
+
+    <select id="selectUserOnlineList" parameterType="com.linzx.system.domain.UserOnline" resultMap="UserOnlineResult">
+        <include refid="selectUserOnlineVo"/>
+        <where>
+            <if test="sessionId != null "> and session_id = #{sessionId}</if>
+            <if test="sessionKey != null "> and session_key = #{sessionKey}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="loginName != null "> and login_name = #{loginName}</if>
+            <if test="ipaddr != null "> and ipaddr = #{ipaddr}</if>
+            <if test="browser != null "> and browser = #{browser}</if>
+            <if test="onlineStatus != null "> and online_status = #{onlineStatus}</if>
+            <if test="loginLocation != null "> and login_location = #{loginLocation}</if>
+            <if test="os != null "> and os = #{os}</if>
+            <if test="timeOut != null "> and time_out = #{timeOut}</if>
+            <if test="revision != null "> and revision = #{revision}</if>
+            <if test="createdBy != null "> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null "> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+            <if test="remark != null "> and remark = #{remark}</if>
+        </where>
+    </select>
+
+    <select id="getUserOnlineById" parameterType="java.lang.Long" resultMap="UserOnlineResult">
+        <include refid="selectUserOnlineVo"/>
+        where session_id = #{sessionId}
+    </select>
+
+    <insert id="insertUserOnline" parameterType="com.linzx.system.domain.UserOnline" useGeneratedKeys="true" keyProperty="sessionId">
+        insert into sys_user_online
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sessionKey != null  ">session_key,</if>
+            <if test="userId != null  ">user_id,</if>
+            <if test="loginName != null  ">login_name,</if>
+            <if test="ipaddr != null  ">ipaddr,</if>
+            <if test="browser != null  ">browser,</if>
+            <if test="onlineStatus != null  ">online_status,</if>
+            <if test="loginLocation != null  ">login_location,</if>
+            <if test="os != null  ">os,</if>
+            <if test="timeOut != null  ">time_out,</if>
+            <if test="revision != null  ">revision,</if>
+            <if test="createdBy != null  ">created_by,</if>
+            <if test="createdTime != null  ">created_time,</if>
+            <if test="updatedBy != null  ">updated_by,</if>
+            <if test="updatedTime != null  ">updated_time,</if>
+            <if test="remark != null  ">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sessionKey != null  ">#{sessionKey},</if>
+            <if test="userId != null  ">#{userId},</if>
+            <if test="loginName != null  ">#{loginName},</if>
+            <if test="ipaddr != null  ">#{ipaddr},</if>
+            <if test="browser != null  ">#{browser},</if>
+            <if test="onlineStatus != null  ">#{onlineStatus},</if>
+            <if test="loginLocation != null  ">#{loginLocation},</if>
+            <if test="os != null  ">#{os},</if>
+            <if test="timeOut != null  ">#{timeOut},</if>
+            <if test="revision != null  ">#{revision},</if>
+            <if test="createdBy != null  ">#{createdBy},</if>
+            <if test="createdTime != null  ">#{createdTime},</if>
+            <if test="updatedBy != null  ">#{updatedBy},</if>
+            <if test="updatedTime != null  ">#{updatedTime},</if>
+            <if test="remark != null  ">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateUserOnline" parameterType="com.linzx.system.domain.UserOnline">
+        update sys_user_online
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sessionKey != null  ">session_key = #{sessionKey},</if>
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="loginName != null  ">login_name = #{loginName},</if>
+            <if test="ipaddr != null  ">ipaddr = #{ipaddr},</if>
+            <if test="browser != null  ">browser = #{browser},</if>
+            <if test="onlineStatus != null  ">online_status = #{onlineStatus},</if>
+            <if test="loginLocation != null  ">login_location = #{loginLocation},</if>
+            <if test="os != null  ">os = #{os},</if>
+            <if test="timeOut != null  ">time_out = #{timeOut},</if>
+            <if test="createdBy != null  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="remark != null  ">remark = #{remark},</if>
+        </trim>
+        where session_id = #{sessionId}
+    </update>
+
+    <delete id="deleteUserOnlineById" parameterType="java.lang.Long">
+        delete from sys_user_online where session_id = #{sessionId}
+    </delete>
+
+    <delete id="deleteUserOnlineByIds" parameterType="java.lang.Long">
+        delete from sys_user_online where session_id in
+        <foreach item="sessionId" collection="array" open="(" separator="," close=")">
+            #{sessionId}
+        </foreach>
+    </delete>
+
+    <!--自定义sql-->
+    <select id="getUserOnlineBySessionKey" parameterType="java.lang.String" resultMap="UserOnlineResult">
+        <include refid="selectUserOnlineVo"/>
+        where session_key = #{sessionKey}
+    </select>
+
+    <select id="getUserOnlineByUserId" parameterType="java.lang.Long" resultMap="UserOnlineResult">
+        <include refid="selectUserOnlineVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectOnlineByExpired" parameterType="java.lang.String" resultMap="UserOnlineResult">
+        <include refid="selectUserOnlineVo"/>
+        where updated_time <![CDATA[ < ]]> #{lastAccessTime} ORDER BY updated_time ASC
+    </select>
+</mapper>

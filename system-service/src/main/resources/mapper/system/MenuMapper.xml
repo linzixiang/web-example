@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.MenuMapper">
+    
+    <resultMap type="com.linzx.system.domain.Menu" id="MenuResult">
+        <result property="menuId"    column="menu_id"    />
+        <result property="menuName"    column="menu_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="depth"    column="depth"    />
+        <result property="url"    column="url"    />
+        <result property="menuType"    column="menu_type"    />
+        <result property="invisible"    column="invisible"    />
+        <result property="perms"    column="perms"    />
+        <result property="icon"    column="icon"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="revision"    column="revision"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select menu_id, menu_name, parent_id, order_num, ancestors, depth, url, menu_type, invisible, perms, icon, status, del_flag, revision, created_by, created_time, updated_by, updated_time, remark from sys_menu
+    </sql>
+	
+    <select id="selectList" parameterType="java.util.Map" resultMap="MenuResult">
+        <include refid="selectVo"/>
+        <include refid="selectList_where"/>
+        <if test="params.orderBy != null and params.orderBy != ''">
+            ORDER BY ${params.orderBy}
+        </if>
+    </select>
+
+    <sql id="selectList_where">
+        <where>
+            <if test="menuId != null "> and menu_id = #{menuId}</if>
+            <if test="menuName != null and menuName != ''"> and menu_name = #{menuName}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+            <if test="ancestors != null "> and ancestors = #{ancestors}</if>
+            <if test="depth != null "> and depth = #{depth}</if>
+            <if test="menuType != null "> and menu_type = #{menuType}</if>
+            <if test="invisible != null "> and invisible = #{invisible}</if>
+            <if test="perms != null "> and perms = #{perms}</if>
+            <if test="icon != null "> and icon = #{icon}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+            <if test="revision != null "> and revision = #{revision}</if>
+            <if test="params != null">
+                <if test="params.menuTypes != null">
+                    and menu_type in
+                    <foreach collection="params.menuTypes" item="menuType" open="(" separator="," close=")">
+                        #{menuType}
+                    </foreach>
+                </if>
+                <if test="params.excludeId != null"> and menu_id != #{params.excludeId} </if>
+                <if test="params.menuName != null and params.menuName != ''">
+                    and menu_name like concat('%',#{params.menuName},'%')
+                </if>
+            </if>
+        </where>
+    </sql>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="MenuResult">
+        <include refid="selectVo"/>
+        where menu_id = #{menuId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.Menu" useGeneratedKeys="true" keyProperty="menuId">
+        insert into sys_menu
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="menuName != null  ">menu_name,</if>
+			<if test="parentId != null  ">parent_id,</if>
+			<if test="orderNum != null  ">order_num,</if>
+			<if test="ancestors != null  ">ancestors,</if>
+			<if test="depth != null  ">depth,</if>
+			<if test="url != null  ">url,</if>
+			<if test="menuType != null  ">menu_type,</if>
+			<if test="invisible != null  ">invisible,</if>
+			<if test="perms != null  ">perms,</if>
+			<if test="icon != null  ">icon,</if>
+			<if test="status != null  ">status,</if>
+			<if test="delFlag != null  ">del_flag,</if>
+			<if test="revision != null  ">revision,</if>
+			<if test="createdBy != null  ">created_by,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedBy != null  ">updated_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="remark != null  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="menuName != null  ">#{menuName},</if>
+			<if test="parentId != null  ">#{parentId},</if>
+			<if test="orderNum != null  ">#{orderNum},</if>
+			<if test="ancestors != null  ">#{ancestors},</if>
+			<if test="depth != null  ">#{depth},</if>
+			<if test="url != null  ">#{url},</if>
+			<if test="menuType != null  ">#{menuType},</if>
+			<if test="invisible != null  ">#{invisible},</if>
+			<if test="perms != null  ">#{perms},</if>
+			<if test="icon != null  ">#{icon},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="delFlag != null  ">#{delFlag},</if>
+			<if test="revision != null  ">#{revision},</if>
+			<if test="createdBy != null  ">#{createdBy},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedBy != null  ">#{updatedBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="remark != null  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.Menu">
+        update sys_menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="menuName != null  ">menu_name = #{menuName},</if>
+            <if test="parentId != null  ">parent_id = #{parentId},</if>
+            <if test="orderNum != null  ">order_num = #{orderNum},</if>
+            <if test="ancestors != null  ">ancestors = #{ancestors},</if>
+            <if test="depth != null  ">depth = #{depth},</if>
+            <if test="url != null  ">url = #{url},</if>
+            <if test="menuType != null  ">menu_type = #{menuType},</if>
+            <if test="invisible != null  ">invisible = #{invisible},</if>
+            <if test="perms != null  ">perms = #{perms},</if>
+            <if test="icon != null  ">icon = #{icon},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="delFlag != null  ">del_flag = #{delFlag},</if>
+            <if test="createdBy != null  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="remark != null  ">remark = #{remark},</if>
+        </trim>
+        where menu_id = #{menuId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_menu where menu_id = #{menuId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_menu where menu_id in 
+        <foreach item="menuId" collection="array" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+    </delete>
+
+    <!--自定义sql开始-->
+    <select id="selectAllNormalMenuList" parameterType="java.util.Map" resultMap="MenuResult">
+        <include refid="selectVo"/>
+        <where>
+            `status` = 0 AND del_flag = 0 AND menu_type IN
+            <foreach collection="menuTypes" item="menuType" open="(" separator="," close=")">
+                #{menuType}
+            </foreach>
+            <if test="invisible != null">
+                and invisible = #{invisible}
+            </if>
+        </where>
+        ORDER BY parent_id, order_num DESC
+    </select>
+
+    <select id="selectNormalMenuList" parameterType="java.util.Map" resultMap="MenuResult">
+        SELECT menu.menu_id, menu_name,parent_id,order_num, ancestors,depth, url, menu_type, invisible, perms, icon
+        <include refid="selectNormalMenu_from"/>
+        <include refid="selectNormalMenu_where"/>
+        ORDER BY menu.parent_id,menu.order_num DESC
+    </select>
+
+    <select id="selectNormalPermsByRoleIds" parameterType="java.lang.Long" resultType="java.lang.String">
+        SELECT
+            distinct perms
+        <include refid="selectNormalMenu_from"/>
+        <include refid="selectNormalMenu_where"/>
+            AND menu.perms != ''
+        <!-- distinct 不能与order by通用
+        ORDER BY
+            menu.parent_id,
+            menu.order_num DESC-->
+    </select>
+
+    <sql id="selectNormalMenu_from">
+        FROM sys_role_menu rolemenu
+        LEFT JOIN sys_menu menu ON rolemenu.menu_id = menu.menu_id
+    </sql>
+
+    <sql id="selectNormalMenu_where">
+        <where>
+            rolemenu.role_id in
+            <foreach item="roleId" collection="roleIds" open="(" separator="," close=")">
+                #{roleId}
+            </foreach>
+            AND menu.`status` = 0 AND menu.del_flag = 0 AND menu.menu_type IN
+            <foreach collection="menuTypes" item="menuType" open="(" separator="," close=")">
+                #{menuType}
+            </foreach>
+            <if test="invisible != null">
+              and menu.invisible = #{invisible}
+            </if>
+        </where>
+    </sql>
+
+    <select id="countMenuByCondition" resultType="java.lang.Integer" parameterType="java.util.Map">
+        select count(1) from  sys_menu
+        <include refid="selectList_where"/>
+    </select>
+
+    <select id="countSimple" resultType="java.lang.Long" parameterType="java.util.Map">
+          select count(1) from  sys_menu
+          <include refid="selectList_where"/>
+    </select>
+</mapper>

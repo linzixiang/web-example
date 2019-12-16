@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.UserRoleMapper">
+    
+    <resultMap type="com.linzx.system.domain.UserRole" id="UserRoleResult">
+        <result property="userRoleId"    column="user_role_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="roleId"    column="role_id"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select user_role_id, user_id, role_id from sys_user_role
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.system.domain.UserRole" resultMap="UserRoleResult">
+        <include refid="selectVo"/>
+        <where>  
+            <if test="userRoleId != null "> and user_role_id = #{userRoleId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="roleId != null "> and role_id = #{roleId}</if>
+         </where>
+    </select>
+    
+    <select id="getById" parameterType="java.lang.Long" resultMap="UserRoleResult">
+        <include refid="selectVo"/>
+        where user_role_id = #{userRoleId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.UserRole" useGeneratedKeys="true" keyProperty="userRoleId">
+        insert into sys_user_role
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="roleId != null  ">role_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="roleId != null  ">#{roleId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.UserRole">
+        update sys_user_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="roleId != null  ">role_id = #{roleId},</if>
+        </trim>
+        where user_role_id = #{userRoleId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_user_role where user_role_id = #{userRoleId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_user_role where user_role_id in 
+        <foreach item="userRoleId" collection="array" open="(" separator="," close=")">
+            #{userRoleId}
+        </foreach>
+    </delete>
+
+    <insert id="insertUserRoleBatch" parameterType="com.linzx.system.domain.UserRole">
+        insert into sys_user_role(user_id, role_id) values
+        <foreach collection="collection" item="item" separator="," >
+            (#{item.userId},#{item.roleId})
+        </foreach>
+    </insert>
+    
+</mapper>

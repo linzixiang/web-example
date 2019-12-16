@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.DeptMapper">
+    
+    <resultMap type="com.linzx.system.domain.Dept" id="DeptResult">
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="ancestors"    column="ancestors"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="phone"    column="phone"    />
+        <result property="email"    column="email"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="revision"    column="revision"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select dept_id, dept_name, parent_id, ancestors, order_num, phone, email, status, del_flag, revision, created_by, created_time, updated_by, updated_time from sys_dept
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.system.domain.Dept" resultMap="DeptResult">
+        <include refid="selectVo"/>
+        <include refid="selectList_where"/>
+        <if test="params.orderBy != null and params.orderBy != ''">
+            ORDER BY ${params.orderBy}
+        </if>
+    </select>
+
+    <sql id="selectList_where">
+        <where>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="deptName != null and deptName != ''"> and dept_name = #{deptName}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="ancestors != null "> and ancestors = #{ancestors}</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+            <if test="phone != null "> and phone = #{phone}</if>
+            <if test="email != null "> and email = #{email}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+            <if test="revision != null "> and revision = #{revision}</if>
+            <if test="createdBy != null "> and created_by = #{createdBy}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedBy != null "> and updated_by = #{updatedBy}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+            <if test="createdTimeGte != null and createdTimeGte != ''">
+                and created_time >= #{createdTimeGte}
+            </if>
+            <if test="createdTimeLte != null and createdTimeLte != ''">
+                <![CDATA[and created_time <= #{createdTimeLte}]]>
+            </if>
+            <if test="params.excludeRoot == 'true'">
+                and parent_id != 0
+            </if>
+        </where>
+    </sql>
+    
+    <select id="getById" parameterType="java.lang.Long" resultMap="DeptResult">
+        <include refid="selectVo"/>
+        where dept_id = #{deptId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.Dept" useGeneratedKeys="true" keyProperty="deptId">
+        insert into sys_dept
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="deptName != null  ">dept_name,</if>
+			<if test="parentId != null  ">parent_id,</if>
+			<if test="ancestors != null  ">ancestors,</if>
+			<if test="orderNum != null  ">order_num,</if>
+			<if test="phone != null  ">phone,</if>
+			<if test="email != null  ">email,</if>
+			<if test="status != null  ">status,</if>
+			<if test="delFlag != null  ">del_flag,</if>
+			<if test="revision != null  ">revision,</if>
+			<if test="createdBy != null  ">created_by,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedBy != null  ">updated_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="deptName != null  ">#{deptName},</if>
+			<if test="parentId != null  ">#{parentId},</if>
+			<if test="ancestors != null  ">#{ancestors},</if>
+			<if test="orderNum != null  ">#{orderNum},</if>
+			<if test="phone != null  ">#{phone},</if>
+			<if test="email != null  ">#{email},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="delFlag != null  ">#{delFlag},</if>
+			<if test="revision != null  ">#{revision},</if>
+			<if test="createdBy != null  ">#{createdBy},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedBy != null  ">#{updatedBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.Dept">
+        update sys_dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deptName != null  ">dept_name = #{deptName},</if>
+            <if test="parentId != null  ">parent_id = #{parentId},</if>
+            <if test="ancestors != null  ">ancestors = #{ancestors},</if>
+            <if test="orderNum != null  ">order_num = #{orderNum},</if>
+            <if test="phone != null  ">phone = #{phone},</if>
+            <if test="email != null  ">email = #{email},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="delFlag != null  ">del_flag = #{delFlag},</if>
+            <if test="createdBy != null  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+        </trim>
+        where dept_id = #{deptId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_dept where dept_id = #{deptId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_dept where dept_id in 
+        <foreach item="deptId" collection="array" open="(" separator="," close=")">
+            #{deptId}
+        </foreach>
+    </delete>
+    
+</mapper>

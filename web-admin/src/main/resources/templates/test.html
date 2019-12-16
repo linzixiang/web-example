@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="fragment :: header('新增角色')" />
+    <th:block th:include="fragment :: ztree-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-role-add">
+        <input type="file" name='file' id="file" value="上传图片">
+        <input type="button" value="提交" class="uploadForm">
+    </form>
+</div>
+<th:block th:include="fragment :: footer" />
+<th:block th:include="fragment :: ztree-js" />
+</body>
+<script type="text/javascript">
+    $(function() {
+        $(".uploadForm").on('click', function () {
+            var formData = new FormData();
+            var file = $("#file")[0].files[0];
+            formData.append("file", file);
+            $.ajax({
+                url: "/linzx/fileOperate/uploadImage",
+                type: 'POST',
+                data: formData,
+                // 告诉jQuery不要去处理发送的数据
+                processData: false,
+                // 告诉jQuery不要去设置Content-Type请求头
+                contentType: false,
+                beforeSend: function () {
+                    console.log("正在进行，请稍候");
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        })
+    });
+</script>
+</html>

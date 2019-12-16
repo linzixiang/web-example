@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<apiGateway>
+    <module desc="系统基础功能">
+        <api id="system.dict.list" urlMap="/system/dict/list" desc="字典列表"/>
+    </module>
+</apiGateway>

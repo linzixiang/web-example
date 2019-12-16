@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dict>
+    <dictOp queryCode="yesOrNo1" dictCode="sys_yes_no" excludeStop="true" excludeDelete="true" whereExt=" del_flag = 0 "/>
+    <dictOp queryCode="yesOrNo2" dictCode="sys_yes_no" excludeStop="true" excludeDelete="true" whereExt=" del_flag = 1 "/>
+</dict>

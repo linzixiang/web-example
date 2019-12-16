@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.RoleDeptMapper">
+    
+    <resultMap type="com.linzx.system.domain.RoleDept" id="RoleDeptResult">
+        <result property="roleDeptId"    column="role_dept_id"    />
+        <result property="roleId"    column="role_id"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select role_dept_id, role_id, dept_id from sys_role_dept
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.system.domain.RoleDept" resultMap="RoleDeptResult">
+        <include refid="selectVo"/>
+        <where>  
+            <if test="roleDeptId != null "> and role_dept_id = #{roleDeptId}</if>
+             <if test="roleId != null "> and role_id = #{roleId}</if>
+             <if test="deptId != null "> and dept_id = #{deptId}</if>
+         </where>
+    </select>
+    
+    <select id="getById" parameterType="java.lang.Long" resultMap="RoleDeptResult">
+        <include refid="selectVo"/>
+        where role_dept_id = #{roleDeptId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.RoleDept" useGeneratedKeys="true" keyProperty="roleDeptId">
+        insert into sys_role_dept
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">role_id,</if>
+			<if test="deptId != null  ">dept_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">#{roleId},</if>
+			<if test="deptId != null  ">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertRoleDeptBatch" parameterType="com.linzx.system.domain.RoleDept">
+        insert into sys_role_dept(role_id, dept_id) values
+        <foreach collection="collection" item="item" separator="," >
+            (#{item.roleId},#{item.deptId})
+        </foreach>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.RoleDept">
+        update sys_role_dept
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleId != null  ">role_id = #{roleId},</if>
+            <if test="deptId != null  ">dept_id = #{deptId},</if>
+        </trim>
+        where role_dept_id = #{roleDeptId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_role_dept where role_dept_id = #{roleDeptId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_role_dept where role_dept_id in 
+        <foreach item="roleDeptId" collection="array" open="(" separator="," close=")">
+            #{roleDeptId}
+        </foreach>
+    </delete>
+    
+</mapper>

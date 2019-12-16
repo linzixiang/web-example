@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="fragment :: header('新增字典类型')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-dict-add">
+        <div class="form-group">
+            <label class="col-sm-3 control-label ">字典名称：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="dictName" id="dictName" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">唯一编码：</label>
+            <div class="col-sm-8">
+                <input class="form-control" type="text" name="dictCode" id="dictCode" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">状态：</label>
+            <div class="col-sm-8" th:with="options=${@commonService.queryDictOptions('sys_normal_disable')}">
+                <div class="radio-box" th:each="option : ${options}">
+                    <input type="radio" name="status" th:id="'sys_normal_disable' + ${option.value}" th:value="${option.value}" th:checked="${option.value == '0'}">
+                    <label th:for="'sys_normal_disable' + ${option.value}"  th:text="${option.labelName}">是</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <textarea id="remark" name="remark" class="form-control"></textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<th:block th:include="fragment :: footer" />
+<script type="text/javascript">
+    var prefix = ctx + "/system/dict";
+
+    $("#form-dict-add").validate({
+        onkeyup: false,
+        rules:{
+            dictCode:{
+                minlength: 5,
+                remote: {
+                    url: prefix + "/checkDictCodeUnique",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        name : function() {
+                            return $.common.trim($("#dictCode").val());
+                        }
+                    },
+                    dataFilter: function(data, type) {
+                        return $.parseJSON(data).data;
+                    }
+                }
+            },
+        },
+        messages: {
+            "dictCode": {
+                remote: "该字典类型已经存在"
+            }
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/saveAdd", $('#form-dict-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

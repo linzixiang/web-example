@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.DictOptionsMapper">
+    
+    <resultMap type="com.linzx.system.domain.DictOptions" id="DictOptionsResult">
+        <result property="dictOptionId"    column="dict_option_id"    />
+        <result property="dictCode"    column="dict_code"    />
+        <result property="optionLabel"    column="option_label"    />
+        <result property="dictValue"    column="dict_value"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="cssClass"    column="css_class"    />
+        <result property="listClass"    column="list_class"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="revision"    column="revision"    />
+        <result property="createdBy"    column="created_by"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedBy"    column="updated_by"    />
+        <result property="updatedTime"    column="updated_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select dict_option_id, dict_code, option_label, dict_value, is_default, order_num, css_class, list_class, status, del_flag, revision, created_by, created_time, updated_by, updated_time, remark from sys_dict_options
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.system.domain.DictOptions" resultMap="DictOptionsResult">
+        <include refid="selectVo"/>
+        <where>  
+            <if test="dictOptionId != null "> and dict_option_id = #{dictOptionId}</if>
+             <if test="dictCode != null "> and dict_code = #{dictCode}</if>
+             <if test="optionLabel != null "> and option_label = #{optionLabel}</if>
+             <if test="dictValue != null "> and dict_value = #{dictValue}</if>
+             <if test="isDefault != null "> and is_default = #{isDefault}</if>
+             <if test="orderNum != null "> and order_num = #{orderNum}</if>
+             <if test="cssClass != null "> and css_class = #{cssClass}</if>
+             <if test="listClass != null "> and list_class = #{listClass}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="delFlag != null "> and del_flag = #{delFlag}</if>
+             <if test="revision != null "> and revision = #{revision}</if>
+             <if test="createdBy != null "> and created_by = #{createdBy}</if>
+             <if test="createdTime != null "> and created_time = #{createdTime}</if>
+             <if test="updatedBy != null "> and updated_by = #{updatedBy}</if>
+             <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+             <if test="remark != null "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="getById" parameterType="java.lang.Long" resultMap="DictOptionsResult">
+        <include refid="selectVo"/>
+        where dict_option_id = #{dictOptionId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.DictOptions" useGeneratedKeys="true" keyProperty="dictOptionId">
+        insert into sys_dict_options
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dictCode != null  ">dict_code,</if>
+			<if test="optionLabel != null  ">option_label,</if>
+			<if test="dictValue != null  ">dict_value,</if>
+			<if test="isDefault != null  ">is_default,</if>
+			<if test="orderNum != null  ">order_num,</if>
+			<if test="cssClass != null  ">css_class,</if>
+			<if test="listClass != null  ">list_class,</if>
+			<if test="status != null  ">status,</if>
+			<if test="delFlag != null  ">del_flag,</if>
+			<if test="revision != null  ">revision,</if>
+			<if test="createdBy != null  ">created_by,</if>
+			<if test="createdTime != null  ">created_time,</if>
+			<if test="updatedBy != null  ">updated_by,</if>
+			<if test="updatedTime != null  ">updated_time,</if>
+			<if test="remark != null  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dictCode != null  ">#{dictCode},</if>
+			<if test="optionLabel != null  ">#{optionLabel},</if>
+			<if test="dictValue != null  ">#{dictValue},</if>
+			<if test="isDefault != null  ">#{isDefault},</if>
+			<if test="orderNum != null  ">#{orderNum},</if>
+			<if test="cssClass != null  ">#{cssClass},</if>
+			<if test="listClass != null  ">#{listClass},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="delFlag != null  ">#{delFlag},</if>
+			<if test="revision != null  ">#{revision},</if>
+			<if test="createdBy != null  ">#{createdBy},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+			<if test="updatedBy != null  ">#{updatedBy},</if>
+			<if test="updatedTime != null  ">#{updatedTime},</if>
+			<if test="remark != null  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.DictOptions">
+        update sys_dict_options
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dictCode != null  ">dict_code = #{dictCode},</if>
+            <if test="optionLabel != null  ">option_label = #{optionLabel},</if>
+            <if test="dictValue != null  ">dict_value = #{dictValue},</if>
+            <if test="isDefault != null  ">is_default = #{isDefault},</if>
+            <if test="orderNum != null  ">order_num = #{orderNum},</if>
+            <if test="cssClass != null  ">css_class = #{cssClass},</if>
+            <if test="listClass != null  ">list_class = #{listClass},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="delFlag != null  ">del_flag = #{delFlag},</if>
+            <if test="createdBy != null  ">created_by = #{createdBy},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+            <if test="updatedBy != null  ">updated_by = #{updatedBy},</if>
+            <if test="updatedTime != null  ">updated_time = #{updatedTime},</if>
+            <if test="remark != null  ">remark = #{remark},</if>
+        </trim>
+        where dict_option_id = #{dictOptionId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_dict_options where dict_option_id = #{dictOptionId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_dict_options where dict_option_id in 
+        <foreach item="dictOptionId" collection="array" open="(" separator="," close=")">
+            #{dictOptionId}
+        </foreach>
+    </delete>
+
+    <select id="selectDictOptionList" parameterType="com.linzx.framework.bean.DictBean" resultType="com.linzx.framework.web.vo.DictOptionVo">
+        SELECT option_label AS labelName,dict_value AS `value`, is_default AS isDefault, list_class AS listClass from sys_dict_options
+        <where>
+            dict_code = #{dictCode}
+            <if test="excludeStop != null and excludeStop == 'true'">AND `status` = 0 </if>
+            <if test="excludeStop != null and excludeStop == 'true'">AND del_flag = 0 </if>
+            <if test="whereExt != null and whereExt != ''">AND ${whereExt}</if>
+        </where>
+        order by order_num desc
+    </select>
+
+</mapper>

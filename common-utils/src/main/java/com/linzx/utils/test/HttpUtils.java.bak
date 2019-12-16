@@ -1,0 +1,100 @@
+//package com.linzx.utils.test;
+//
+//import org.apache.commons.httpclient.HttpClient;
+//import org.apache.commons.httpclient.NameValuePair;
+//import org.apache.commons.httpclient.methods.GetMethod;
+//import org.apache.commons.httpclient.methods.PostMethod;
+//import org.apache.commons.httpclient.params.HttpMethodParams;
+//
+//import java.net.HttpURLConnection;
+//import java.util.Map;
+//
+///**
+// * 测试模拟发送网络请求
+// */
+//public class HttpUtils {
+//
+//    /**
+//     * 连接超时时间
+//     */
+//    private static final int CONST_CONNECTION_TIMEOUT_SECOND = 3;
+//
+//    /**
+//     * 请求超时时间
+//     */
+//    private static final int CONST_SO_TIMEOUT_SECOND = 30;
+//
+//    /**
+//     * 执行http请求并返回文本结果
+//     *
+//     * @param s_url
+//     * @param params
+//     * @return
+//     * @throws Exception
+//     */
+//    public static String doPost(String s_url, Map<String, String> params) {
+//        PostMethod postmethod = null;
+//        try {
+//            HttpClient httpclient = createHttpClient();
+//            postmethod = new PostMethod(s_url);
+//            if (params != null) {
+//                NameValuePair[] pairs = getNameValuePair(params);
+//                postmethod.setRequestBody(pairs);
+//            }
+//            int code = httpclient.executeMethod(postmethod);
+//            if (code == HttpURLConnection.HTTP_OK) {
+//                String ret = postmethod.getResponseBodyAsString();
+//                return ret;
+//            } else {
+//                throw new RuntimeException("返回状态码异常：" + code);
+//            }
+//        } catch (Exception e) {
+//            throw new RuntimeException("http post error,url=" + s_url + ",ex=" + e.getMessage(), e);
+//        } finally {
+//            if (postmethod != null)
+//                postmethod.releaseConnection();
+//        }
+//    }
+//
+//    public static String doGet(String s_url) throws Exception{
+//        GetMethod getmethod = null;
+//        try{
+//            HttpClient httpclient = createHttpClient();
+//            getmethod = new GetMethod(s_url);
+//            int code = httpclient.executeMethod(getmethod);
+//            if(code == HttpURLConnection.HTTP_OK){
+//                String ret = getmethod.getResponseBodyAsString();
+//                return ret;
+//            }else{
+//                throw new RuntimeException("返回状态码异常：" + code);
+//            }
+//        }catch(Exception e){
+//            throw e;
+//        }finally{
+//            if(getmethod != null)
+//                getmethod.releaseConnection();
+//        }
+//    }
+//
+//    public static HttpClient createHttpClient() {
+//        HttpClient httpclient = new HttpClient();
+//        //连接超时
+//        httpclient.getHttpConnectionManager().getParams().setConnectionTimeout(CONST_CONNECTION_TIMEOUT_SECOND * 1000);
+//        //服务器返回结果超时
+//        httpclient.getHttpConnectionManager().getParams().setSoTimeout(CONST_SO_TIMEOUT_SECOND * 1000);
+//        httpclient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, "utf-8");
+//        return httpclient;
+//    }
+//
+//    public static NameValuePair[] getNameValuePair(Map<String, String> params) {
+//        NameValuePair[] pairs = new NameValuePair[params.size()];//参数的个数
+//        String[] keys = new String[params.size()];
+//        params.keySet().toArray(keys);
+//        for (int i = 0; i < keys.length; i++) {
+//            String key = keys[i];
+//            pairs[i] = new NameValuePair(key, params.get(key));
+//        }
+//        return pairs;
+//    }
+//
+//}

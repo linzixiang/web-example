@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<codes>
+    <!--
+        keyName：唯一编码
+    -->
+    <code keyName="user_normal" tableName="sys_user" nameField="user_nickname" valueField="user_id" whereExt="status = 0 and del_flag = 0" orderBy="name desc" />
+</codes>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.system.mapper.RoleSensMapper">
+    
+    <resultMap type="com.linzx.system.domain.RoleSens" id="RoleSensResult">
+        <result property="sensId"    column="sens_id"    />
+        <result property="roleId"    column="role_id"    />
+        <result property="sensCode"    column="sens_code"    />
+        <result property="revision"    column="revision"    />
+        <result property="createdTime"    column="created_time"    />
+    </resultMap>
+	
+	<sql id="selectVo">
+        select sens_id, role_id, sens_code, revision, created_time from sys_role_sens
+    </sql>
+	
+    <select id="selectList" parameterType="com.linzx.system.domain.RoleSens" resultMap="RoleSensResult">
+        <include refid="selectVo"/>
+        <include refid="selectList_where"/>
+    </select>
+    <sql id="selectList_where">
+        <where>
+            <if test="sensId != null "> and sens_id = #{sensId}</if>
+            <if test="roleId != null "> and role_id = #{roleId}</if>
+            <if test="sensCode != null "> and sens_code = #{sensCode}</if>
+            <if test="revision != null "> and revision = #{revision}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+        </where>
+    </sql>
+    <select id="getById" parameterType="java.lang.Long" resultMap="RoleSensResult">
+        <include refid="selectVo"/>
+        where sens_id = #{sensId}
+    </select>
+        
+    <insert id="insert" parameterType="com.linzx.system.domain.RoleSens">
+        insert into sys_role_sens
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="sensId != null  ">sens_id,</if>
+			<if test="roleId != null  ">role_id,</if>
+			<if test="sensCode != null  ">sens_code,</if>
+			<if test="revision != null  ">revision,</if>
+			<if test="createdTime != null  ">created_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="sensId != null  ">#{sensId},</if>
+			<if test="roleId != null  ">#{roleId},</if>
+			<if test="sensCode != null  ">#{sensCode},</if>
+			<if test="revision != null  ">#{revision},</if>
+			<if test="createdTime != null  ">#{createdTime},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertRoleSensBatch" parameterType="com.linzx.system.domain.RoleSens">
+        insert into sys_role_sens (role_id, sens_code) values
+        <foreach collection="collection"  item="item" separator=",">
+            (#{item.roleId},#{item.sensCode})
+        </foreach>
+    </insert>
+	 
+    <update id="update" parameterType="com.linzx.system.domain.RoleSens">
+        update sys_role_sens
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleId != null  ">role_id = #{roleId},</if>
+            <if test="sensCode != null  ">sens_code = #{sensCode},</if>
+            <if test="createdTime != null  ">created_time = #{createdTime},</if>
+        </trim>
+        where sens_id = #{sensId}
+    </update>
+
+	<delete id="deleteById" parameterType="java.lang.Long">
+        delete from sys_role_sens where sens_id = #{sensId}
+    </delete>
+	
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from sys_role_sens where sens_id in 
+        <foreach item="sensId" collection="array" open="(" separator="," close=")">
+            #{sensId}
+        </foreach>
+    </delete>
+    
+</mapper>

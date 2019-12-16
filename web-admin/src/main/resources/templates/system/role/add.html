@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+    <head>
+        <th:block th:include="fragment :: header('新增角色')" />
+        <th:block th:include="fragment :: ztree-css" />
+    </head>
+    <body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-role-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label ">角色名称：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="roleName" id="roleName" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">权限字符：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="roleCode" id="roleCode" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">显示顺序：</label>
+                <div class="col-sm-8">
+                    <input class="form-control" type="text" name="orderNum" id="orderNum" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="onoffswitch">
+                        <input type="checkbox" th:checked="true" class="onoffswitch-checkbox" id="status" name="status">
+                        <label class="onoffswitch-label" for="status">
+                            <span class="onoffswitch-inner"></span>
+                            <span class="onoffswitch-switch"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <input id="remark" name="remark" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">菜单权限</label>
+                <div class="col-sm-8">
+                    <div id="menuTrees" class="ztree"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="fragment :: footer" />
+    <th:block th:include="fragment :: ztree-js" />
+    </body>
+    <script type="text/javascript">
+        var prefix = ctx + "/system/role";
+        $(function() {
+            var url = ctx + "/system/menu/loadAllMenuTree";
+            var options = {
+                id: "menuTrees",
+                url: url,
+                dataId: "menuId",
+                dataName: "menuName",
+                dataUrl: "xUrl",
+                check: { enable: true },
+                expandLevel: 1
+            };
+            $.tree.init(options);
+        });
+        $("#form-role-add").validate({
+            rules:{
+                roleName:{
+                    remote: {
+                        url: prefix + "/checkRoleNameUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "roleName" : function() {
+                                return $.common.trim($("#roleName").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return $.parseJSON(data).data;
+                        }
+                    }
+                },
+                roleCode:{
+                    remote: {
+                        url: prefix + "/checkRoleCodeUnique",
+                        type: "post",
+                        dataType: "json",
+                        data: {
+                            "roleCode" : function() {
+                                return $.common.trim($("#roleName").val());
+                            }
+                        },
+                        dataFilter: function(data, type) {
+                            return $.parseJSON(data).data;
+                        }
+                    }
+                },
+                orderNum:{
+                    digits:true
+                },
+            },
+            messages: {
+                "roleName": {
+                    remote: "角色名称已经存在"
+                },
+                "roleCode": {
+                    remote: "角色权限已经存在"
+                }
+            },
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                add();
+            }
+        }
+        function add() {
+            var status = $("input[name='status']").is(':checked') == true ? 0 : 1;
+            var menuIds = $.tree.getCheckedNodes("menuId");
+            $.operate.save(prefix + "/saveAdd", {
+                menuIds: menuIds,
+                status: status,
+                roleName: $("input[name='roleName']").val(),
+                roleCode: $("input[name='roleCode']").val(),
+                orderNum: $("input[name='orderNum']").val(),
+                remark: $("input[name='remark']").val()
+            })
+            // var roleParam = $('#form-role-add').serialize() + "&status" + "&menuIds=" + menuIds
+            // $.operate.save(prefix + "/saveAdd", roleParam)
+        }
+    </script>
+</html>

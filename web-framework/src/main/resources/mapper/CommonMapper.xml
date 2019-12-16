@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linzx.framework.mapper.CommonMapper">
+
+    <select id="selectCodeList" parameterType="com.linzx.framework.bean.CodeBean" resultType="com.linzx.framework.web.vo.TableCodeVo">
+        select ${codeBean.valueField} as id, ${codeBean.nameField} as name
+        from ${codeBean.tableName}
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+              and ${codeBean.likeField} like concat('%', #{searchKeyword}, '%')
+            </if>
+            <if test="codeBean.whereExt != null and codeBean.whereExt != ''">
+              and ${codeBean.whereExt}
+            </if>
+        </where>
+        <if test="codeBean.orderBy != null">
+            order by ${codeBean.orderBy}
+        </if>
+    </select>
+
+</mapper>
