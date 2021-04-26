@@ -37,7 +37,7 @@
         <druid.version>1.1.10</druid.version>
         <fastjson.version>1.2.56</fastjson.version>
         <velocity.version>1.7</velocity.version>
-        <commons.io.version>2.5</commons.io.version>
+        <commons.io.version>2.7</commons.io.version>
         <!-- 自定义模块版本 -->
         <web.admin.version>1.0-SNAPSHOT</web.admin.version>
         <web.framework.version>1.0-SNAPSHOT</web.framework.version>
